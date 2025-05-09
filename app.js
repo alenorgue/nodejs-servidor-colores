@@ -1,3 +1,8 @@
+
+const http = require('http');
+const url = require('url');
+
+
 const colors = [
     { variant: "Vermillion", hex: "#2E191B" },
     { variant: "Forest", hex: "#0B6623" },
@@ -15,3 +20,57 @@ const colors = [
     { variant: "Maroon", hex: "#800000" },
     { variant: "Coral", hex: "#FF7F50" }
 ];
+
+const server = http.createServer((req, res) => {
+    const parsedUrl = url.parse(req.url, true);
+    const pathname = parsedUrl.pathname;
+    const query = parsedUrl.query;
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+
+    if (pathname === '/color') {
+        let color;
+
+        if (query.variant) {
+            color = colors.find(c => c.variant.toLowerCase() === query.variant.toLowerCase());
+        }
+
+        if (!color) {
+            color = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        res.end(`<html> <body style="color: ${color.hex};">
+            <h1>${color.variant}</h1><p>Hex: ${color.hex}</p></body></html>`);
+    
+    } else if (pathname === '/get-colors') {
+        const htmlList = colors.map(c =>
+            `<tr>
+               <td><a href="/color?variant=${encodeURIComponent(c.variant)}">${c.variant}</a></td>
+               <td>${c.hex}</td>
+               <td style="background-color: ${c.hex}; width: 50px;"></td>
+             </tr>`
+        ).join('');
+
+        res.end(`
+          <html>
+            <body>
+              <h1>Lista de colores</h1>
+              <table border="1">
+                <tr><th>Nombre</th><th>Hex</th><th>Color</th></tr>
+                ${htmlList}
+              </table>
+            </body>
+          </html>
+        `);
+
+    } else {
+        res.end(`<h1>Bienvenidos a la base de datos de colores de NetMind!</h1>
+       <p>Para obtener un color aleatorio, haz una petición GET al endpoint <code>/color</code>.</p>
+        <p>Para obtener un color específico, usa <code>/color?variant=[color]</code> (por ejemplo, <code>/color?variant=Vermillion</code>).</p>
+        <p>Para obtener la lista de colores, haz una petición GET al endpoint <code>/get-colors</code>.</p>
+        `);
+    }
+});
+
+server.listen(3000, () => {
+    console.log('Listening on port 3000...');
+});
