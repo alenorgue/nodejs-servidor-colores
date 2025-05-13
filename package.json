@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-servidor-colores",
+  "version": "1.0.0",
+  "description": "Queremos crear un servidor que, al recibir peticiones de un cliente, emite diferente respuestas. La idea general es que el servidor dispone de una \"base de datos\" con los colores requeridos para una aplicación",
+  "main": "app-express.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alenorgue/nodejs-servidor-colores.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alenorgue/nodejs-servidor-colores/issues"
+  },
+  "homepage": "https://github.com/alenorgue/nodejs-servidor-colores#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "lodash": "^4.17.21"
+  }
+}
